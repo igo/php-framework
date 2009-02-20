@@ -44,7 +44,7 @@ class Framework_Views_View {
 	 * @param object $view
 	 */
 	public function render($layout, $view) {
-		$this->format = 'json';
+		//$this->format = 'json';
 		if ($this->format == null) {
 			$acceptedTypes = explode(',', $_SERVER["HTTP_ACCEPT"]);
 			foreach ($acceptedTypes as $acceptedType) {
