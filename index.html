@@ -1,1 +1,112 @@
-My GitHub Page
+<html>
+<head>
+<title>Yet Another MVC PHP framework</title>
+<style type="text/css">
+.block {
+	display: block;
+	margin: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Yet Another MVC PHP framework</h1>
+
+<h2>Requirements</h2>
+All you need is PHP 5.2 running on Apache with mod_rewrite enabled.
+
+
+<h2>Supported database servers</h2>
+Currently only MySQL is supported.
+
+
+<h2>Installation</h2>
+Just copy index.php, config.php, .htaccess files and framework directory to your web root.
+
+
+<h2>Configuration</h2>
+Whole framework-wide configuration is in config.php file in root directory.
+
+<h3>Structure of main config.php</h3>
+
+<h4>Debug level</h4>
+Debug level can be set to various levels.
+<ul>
+	<li>0 - logging is disabled</li>
+	<li>1 - basic logging turned on</li>
+	<li>2 - all logs with SQL queries are turned on</li>
+</ul>	
+<code class="block">
+define('DEBUG_LEVEL', 1);
+</code>
+
+<h4>Enabled applications</h4>
+To enable your web application just append a name of your application and it's home directory to <code>$apps</code> array.
+<code class="block">
+$apps[] = array(
+  'name' => 'MyBlogApp',
+  'path' => '/'
+);
+</code>
+
+<h4>Database configuration</h4>
+You can include database connection information in global config.php so it can be shared among all web applications.
+<code class="block">
+$config['db'] = array(
+  'service' => 'mysql',
+  'host' => 'localhost',
+  'db' => 'my_db',
+  'user' => 'root',
+  'password' => 'P4ssw0rd'
+);
+</code>
+
+
+<h2>Conventions</h2>
+YAMP is very flexible and a lot of things depends on developers choice. There is just a few conventions you need to stick to.
+
+<h3>Class names</h3>
+YAMP uses lazy class loading as much as possible. So to make sure your class will be loaded properly <code>YourApp_SomePackage_ClassUsingID</code> must be stored in your_app/some_package/class_using_id.php file.
+
+<h3>Application related files</h3>
+All files that you application need should be stored in one directory which is named after you application and conforms with conventions. For example MyWebApp is in directory named my_web_app.
+
+<h4>Configuration</h4>
+All configuration should be stored in config.php file, e.g. my_web_app/config.php.
+
+<h4>Routes</h4>
+All routes should be stored in routes.php file, e.g. my_web_app/routes.php.
+
+<h4>Constants</h4>
+All constants should be stored in constants.php file, e.g. my_web_app/constants.php.
+
+
+<h2>Sample blog application</h2>
+It amazing how fast you can create new web application form scratch with YAMP. Whole blog application is located in my_blog_app directory.
+
+<h3>Blog configuration</h3>
+Configuration of blog is stored in my_blog_app/config.php.
+
+<h4>Database configuration</h4>
+Blog application is configure to use global database connection paramters.
+<code class="block">
+$config['db'] = $GLOBALS['config']['db'];
+</code>
+
+<h4>Routes</h4>
+Routes are stored in my_blog_app/routes.php. There is just a few routes in this example.
+<p>First route defines index action. That is first action that will be invoked when somebody visits www.myblogapp.com. In this case it's MyBlogApp_Actions_Articles_ListAction class.
+<code class="block">
+$routes[] = route('^$', 'MyBlogApp_Actions_Articles_ListAction');
+</code>
+</p>
+<p>Next route will catch all request that matches pattern "www.myblogapp.com/articles/n" where n is a number, ie. ID of article.
+<code class="block">
+$routes[] = route('^articles/(?P<id>\w+)$', 'MyBlogApp_Actions_Articles_ViewAction');
+</code>
+</p>
+
+</body>
+
+</html>
