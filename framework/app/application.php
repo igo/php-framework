@@ -66,8 +66,14 @@ class Framework_App_Application {
 			if (preg_match("/{$pattern}/", $url, $matches)) {
 				$action = new $this->routes[$i]['action']($this);
 				// check user permissions
-				if (isset($this->security)) {
-					if ($this->security->isAllowed($action)) {
+				if (isset($this->security) && !$this->security->isAllowed($action)) {
+						if ($this->security->isLoggedIn()) {
+							$this->redirect($this->security->config['login']);
+						} else {
+							$this->redirect($this->security->config['login']);
+						}
+						break;
+					} else {
 						// get exec params
 						$actionParams = $action->getExecuteParams();
 						$params = array();
@@ -83,18 +89,10 @@ class Framework_App_Application {
 								}
 							}
 						}
-						
+					
 						// run action
 						call_user_func_array(array($action, 'run'), $params);
 						return true;
-					} else {
-						if ($this->security->isLoggedIn()) {
-							$this->redirect($this->security->config['login']);
-						} else {
-							$this->redirect($this->security->config['login']);
-						}
-						break;
-					}
 				}
 				
 			}
