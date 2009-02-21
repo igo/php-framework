@@ -1,12 +1,7 @@
 <html>
 <head>
 <title>Yet Another MVC PHP framework</title>
-<style type="text/css">
-.block {
-	display: block;
-	margin: 20px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="styles/default.css" />
 </head>
 
 <body>
@@ -36,7 +31,7 @@ Debug level can be set to various levels.
 	<li>0 - logging is disabled</li>
 	<li>1 - basic logging turned on</li>
 	<li>2 - all logs with SQL queries are turned on</li>
-</ul>	
+</ul>
 <code class="block">
 define('DEBUG_LEVEL', 1);
 </code>
@@ -103,7 +98,7 @@ $routes[] = route('^$', 'MyBlogApp_Actions_Articles_ListAction');
 </p>
 <p>Next route will catch all request that matches pattern "www.myblogapp.com/articles/n" where n is a number, ie. ID of article.
 <code class="block">
-$routes[] = route('^articles/(?P<id>\w+)$', 'MyBlogApp_Actions_Articles_ViewAction');
+$routes[] = route('^articles/(?P&lt;id&gt;\w+)$', 'MyBlogApp_Actions_Articles_ViewAction');
 </code>
 </p>
 
