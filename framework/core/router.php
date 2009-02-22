@@ -18,10 +18,10 @@ class Framework_Core_Router {
 			$offset = strpos($url['path'], '/', $offset);
 		}
 		$path = substr($url['path'], $offset + 1);
-		
+
 		// remove last slash /
-		$path = substr($path, 0, -1);
-		
+		//$path = substr($path, 0, -1);
+
 		// run app
 		foreach ($apps as $appConfig) {
 			$app = new Framework_App_Application($appConfig['name']);
@@ -29,7 +29,7 @@ class Framework_Core_Router {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

@@ -1,8 +1,8 @@
 <?php
 
-class MyBlogApp_Actions_Articles_ViewAction extends Framework_Actions_Action {
+class MyBlogApp_Actions_Articles_AddAction extends Framework_Actions_Action {
 
-	public function execute($id) {
+	public function execute() {
 		$article = $this->
 			getModel('Article')->
 			filter('id', '=', $id)->
