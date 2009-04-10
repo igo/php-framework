@@ -5,6 +5,9 @@ function __autoload($class) {
 	if (file_exists($path)) {
 		echo("Loading class $class from file $path\n");
 		require_once $path;
+	} else if (file_exists('apps/'.$path)) {
+		echo("Loading class $class from file apps/$path\n");
+		require_once 'apps/'.$path;
 	} else {
 		debug_print_backtrace();
 		echo("Error loading class $class. File $path not found!\n");
@@ -12,12 +15,12 @@ function __autoload($class) {
 }
 
 function can_import_class($class) {
-	return file_exists(class_to_path($class).'.php');
+	return file_exists('apps/' . class_to_path($class).'.php');
 }
 
 /**
  * Converts this_jet_text to ThisJetText
- * @return 
+ * @return
  * @param str $s
  */
 //function to_camel_case($s) {
@@ -26,7 +29,7 @@ function can_import_class($class) {
 
 /**
  * Converts ThisJETText to this_jet_text
- * @return 
+ * @return
  * @param str $s
  */
 function class_to_file($s) {

@@ -25,11 +25,11 @@ class Framework_App_Application {
 
 	public function load() {
 		// load constants
-		@include class_to_file($this->appName) . '/constants.php';
+		@include 'apps/' . class_to_file($this->appName) . '/constants.php';
 
 		// load urls
 		$urls = array();
-		include class_to_file($this->appName) . '/routes.php';
+		include 'apps/' . class_to_file($this->appName) . '/routes.php';
 		$this->routes = $routes;
 
 		// load config
@@ -40,7 +40,7 @@ class Framework_App_Application {
 				'logout' => 'logout'
 			)
 		);
-		include class_to_file($this->appName) . '/config.php';
+		include 'apps/' . class_to_file($this->appName) . '/config.php';
 		$this->config = $config;
 
 		// connect to db

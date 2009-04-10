@@ -1,9 +1,9 @@
 <?php
 
-$routes[] = route('^$', 'MyBlogApp_Actions_Articles_ListAction');
+$routes[] = route('^$', 'Blog_Actions_Articles_ListAction');
 
-$routes[] = route('^articles/(?P<id>\d+)$', 'MyBlogApp_Actions_Articles_ViewAction');
+$routes[] = route('^articles/(?P<id>\d+)$', 'Blog_Actions_Articles_ViewAction');
 
-$routes[] = route('^articles/add$', 'MyBlogApp_Actions_Articles_AddAction');
+$routes[] = route('^articles/add$', 'Blog_Actions_Articles_AddAction');
 
 ?>

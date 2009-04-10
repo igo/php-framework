@@ -10,11 +10,11 @@ $config['db'] = array(
 );
 
 $apps[] = array(
-	'name' => 'MyBlogApp',
+	'name' => 'Blog',
 	'path' => '/'
 );
 
-$error_404_handler = 'MyBlogApp'
+$error_404_handler = 'Blog'
 
 /*
 $apps[] = array(

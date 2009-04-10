@@ -1,9 +1,9 @@
 <?php
 
-class MyBlogApp_Models_Article extends Framework_Models_Model {
-	
+class Blog_Models_Article extends Framework_Models_Model {
+
 	public $table = 'articles';
-	
+
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 class Framework_Views_View {
-	
+
 	public $types = array(
 		'html' => array('text/html'),
 		'js' => array('text/javascript', 'application/javascript', 'application/x-javascript'),
@@ -9,25 +9,25 @@ class Framework_Views_View {
 	);
 
 	public $format = null;//'html';
-	
+
 	public $vars = array();
-	
+
 	public $app;
-	
+
 	public $action;
-	
+
 	public $viewsPath;
-	
+
 	private $helpersObj = array();
-	
+
 	public function __construct($app, $action) {
 		$this->app = $app;
 		$this->action = $action;
 	}
-	
+
 	/**
 	 * Get possible path to views.
-	 * @return 
+	 * @return
 	 * @param object $class
 	 */
 	public static function classToViewPath($class) {
@@ -36,10 +36,10 @@ class Framework_Views_View {
 		$file = str_replace('_action', '', $file);
 		return $file;
 	}
-	
+
 	/**
 	 * Renders whole page
-	 * @return 
+	 * @return
 	 * @param object $layout
 	 * @param object $view
 	 */
@@ -60,15 +60,15 @@ class Framework_Views_View {
 				$this->format = 'html';
 			}
 		}
-		
+
 		$this->viewsPath = dirname($view);
 		$file = $layout . ".{$this->format}.php";
-		// check if this layout exists		
+		// check if this layout exists
 		if (!file_exists($file)) {
 			// try using backup format
 			$this->format = 'html';
 		}
-		
+
 		$this->helpersObj = array(
 			'helper' => new Framework_Views_Helpers_Helper(),
 			'html' => new Framework_Views_Helpers_HtmlHelper()
@@ -81,26 +81,26 @@ class Framework_Views_View {
 		$blocks = $this->renderBlocks($view);
 		$this->renderLayout($layout, $blocks);
 	}
-	
+
 	/**
 	 * Renders all content with specified format.
 	 * If layout doesn't exists then try to set layout to html.
 	 * If layout is not found anyway then throws exception.
-	 * @return 
+	 * @return
 	 * @param object $layout
 	 * @param object $blocks
 	 */
 	private function renderLayout($layout, $blocks) {
 		$file = $layout . ".{$this->format}.php";
-		if (file_exists($file)) {
+		if (file_exists('apps/' . $file)) {
 			extract($blocks, EXTR_SKIP);
 			extract($this->vars, EXTR_SKIP);
-			include($file);
+			include('apps/' . $file);
 		} else {
 			throw new Exception("Layout $file not found!", 500);
 		}
 	}
-	
+
 	/**
 	 * Renders all blocks for specified view.
 	 * @return array of blocks
@@ -108,7 +108,7 @@ class Framework_Views_View {
 	 */
 	private function renderBlocks($shortPath) {
 		$pattern = '/'.basename($shortPath)."\.([a-zA-Z0-9_-]+)\.{$this->format}\.php/";
-		$files = scandir(dirname($shortPath));
+		$files = scandir(dirname('apps/' . $shortPath));
 		$out = array();
 		foreach ($files as $file) {
 			if (preg_match($pattern, $file, $matches)) {
@@ -117,38 +117,38 @@ class Framework_Views_View {
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Renders specified block and return it.
-	 * @return 
+	 * @return
 	 * @param object $path
 	 */
 	private function renderBlock($path) {
 		extract($this->vars, EXTR_SKIP);
 		ob_start();
-		include ($path);
+		include ('apps/' . $path);
 		$out = ob_get_clean();
 		return $out;
 	}
-	
+
 	/**
 	 * Sets variables which will be available during rendering.
 	 * Example:
 	 *  $files = array('one', 'two');
 	 *  $view->set(compact('files'));
-	 * @return 
+	 * @return
 	 * @param array $params
 	 */
 	public function set($params) {
 		$this->vars += $params;
 	}
-	
+
 	public function element($name, $variables = array()) {
 		extract($this->helpersObj, EXTR_SKIP);
 		extract($variables, EXTR_SKIP);
 		include("{$this->viewsPath}/{$name}.php");
 	}
-	
+
 }
 
 ?>
