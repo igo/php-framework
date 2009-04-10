@@ -102,6 +102,11 @@ class Framework_App_Application {
 		return false;
 	}
 
+	public function redirect($url) {
+		header("Location: $url");
+		exit;
+	}
+
 	public function setResponse($code, $message = null, $data = null) {
 
 	}

@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 echo "<pre>";
 //header('Content-type: text/plain');
 //phpinfo();
@@ -12,4 +14,5 @@ require('config.php');
 $router = new Framework_Core_Router();
 $router->route($apps);
 
+ob_end_flush();
 ?>

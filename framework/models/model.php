@@ -19,7 +19,7 @@ class Framework_Models_Model {
 		$this->reset();
 		$this->modelFactory = $modelFactory;
 	}
-	
+
 	private function buildWherePart() {
 		$wheres = array();
 		foreach ($this->query['where'] as $where) {
@@ -32,11 +32,11 @@ class Framework_Models_Model {
 		}
 		return " WHERE " . implode(' AND ', $wheres);
 	}
-	
+
 	private function buildLimitPart() {
 		return " LIMIT {$this->query['limit']['offset']}, {$this->query['limit']['count']}";
 	}
-	
+
 	private function buildSetPart() {
 		$sets = array();
 		foreach ($this->query['set'] as $set) {
@@ -44,7 +44,7 @@ class Framework_Models_Model {
 		}
 		return " SET " . implode(', ', $wheres);
 	}
-	
+
 	private function buildFieldsListPart() {
 		$fields = array();
 		foreach ($this->query['set'] as $set) {
@@ -52,7 +52,7 @@ class Framework_Models_Model {
 		}
 		return '(' . implode(', ', $fields). ')';
 	}
-	
+
 	private function buildValuesListPart() {
 		$values = array();
 		foreach ($this->query['set'] as $set) {
@@ -60,75 +60,75 @@ class Framework_Models_Model {
 		}
 		return '(' . implode(', ', $values). ')';
 	}
-	
+
 	private function buildSelectQuery() {
 		//print_r($this->query);
 		// SELECT
 		$q = "SELECT " . implode(', ', $this->query['select']);
-		
+
 		// FROM
 		$tables = array();
 		foreach ($this->query['from'] as $table) {
 			$tables[] = "{$table['table']} AS {$table['alias']}";
 		}
 		$q .= " FROM " . implode(', ', $tables);
-		
+
 		// WHERE
 		if (isset($this->query['where'])) {
 			$q .= $this->buildWherePart();
 		}
-		
+
 		// LIMIT
 		if (isset($this->query['limit'])) {
 			$q .= $this->buildLimitPart();
 		}
-		
+
 		return $q;
 	}
-	
+
 	private function buildInsertQuery() {
 		//print_r($this->query);
 		// INSERT
 		$q = "INSERT INTO {$this->table} ";
-		
+
 		// fields list
 		$q .= $this->buildFieldsListPart();
-		
+
 		// VALUES
 		$q .= ' VALUES '. $this->buildValuesListPart();
 
 		return $q;
 	}
-	
+
 	private function buildUpdateQuery() {
 		//print_r($this->query);
 		// UPDATE
 		$q = "UPDATE " . $this->table;
-		
+
 		// SET
 		$q .= $this->buildSetPart();
-		
+
 		// WHERE
 		if (isset($this->query['where'])) {
 			$q .= $this->buildWherePart();
 		}
-		
+
 		return $q;
 	}
-	
+
 	private function buildDeleteQuery() {
 		//print_r($this->query);
 		// DELETE
 		$q = "DELETE FROM " . $this->table;
-		
+
 		// WHERE
 		if (isset($this->query['where'])) {
 			$q .= $this->buildWherePart();
 		}
-		
+
 		return $q;
 	}
-	
+
 	public function fetch() {
 		$this->limit(1);
 		$result = $this->fetchAll();
@@ -148,9 +148,9 @@ class Framework_Models_Model {
 		$q = $this->buildSelectQuery();
 		echo "Executing: $q\n";
 		$q = $this->pdo->query($q);
-		
+
 		$out = array();
-		
+
 		// create model that are binded
 		$relationObj = array();
 		// models binded 1 to N
@@ -181,14 +181,19 @@ class Framework_Models_Model {
 		$this->reset();
 		return $out;
 	}
-	
+
 	public function insert() {
 		$q = $this->buildInsertQuery();
 		echo "Executing: $q\n";
-		var_dump($this->pdo->exec($q));
+		$return = $this->pdo->exec($q);
+		var_dump($return);
 		$this->reset();
+		if ($return === 1) {
+			return array('status' => 'ok');
+		}
+		return array('status' => 'error');
 	}
-	
+
 	public function update() {
 		$q = $this->buildUpdateQuery();
 		echo "Executing: $q\n";
@@ -236,7 +241,7 @@ class Framework_Models_Model {
 		$this->query['set'][] = compact('field', 'value');
 		return $this;
 	}
-	
+
 	public function multiSet(array $fields) {
 		foreach ($fields as $field => $value) {
 			$this->set($field, $value);
@@ -263,7 +268,7 @@ class Framework_Models_Model {
 		$this->query = array ();
 		return $this;
 	}
-	
+
 	/**
 	 * Include relational data in result
 	 * @param str $relation
@@ -283,9 +288,9 @@ class Framework_Models_Model {
 				'fk' => $relation['fk']
 			);
 		}
-		return $this;	
+		return $this;
 	}
-	
+
 	public function validate($data, $action = null) {
 		$this->invalidateField = array();
 		foreach ($this->validation as $field => $validations) {
@@ -307,7 +312,7 @@ class Framework_Models_Model {
 		}
 		return empty($this->invalidateField);
 	}
-	
+
 	public function invalidateField($field, $rule = 'anonymous') {
 		$this->invalidFields[$field][] = $rule;
 	}
