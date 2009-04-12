@@ -4,7 +4,7 @@ define('DEBUG_LEVEL', 1);
 $config['db'] = array(
 	'service' => 'mysql',
 	'host' => 'localhost',
-	'db' => 'my_blog_app',
+	'db' => 'database',
 	'user' => 'root',
 	'password' => 'P4ssw0rd'
 );
